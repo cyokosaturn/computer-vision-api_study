@@ -19,7 +19,9 @@ if (SUBSCRIPTION_KEY) {
     dataUrl: 'black.png',
     resultText: '',
     resultJson: '',
-    selectedImgUrl: 'https://metimes.jp/wp-content/uploads/images/67d79aa97a822fb6e8d4d7b25589a24a.jpg'
+    selectedImgUrl: 'https://metimes.jp/wp-content/uploads/images/67d79aa97a822fb6e8d4d7b25589a24a.jpg',
+    imageFaces: [],
+    cameraFaces: [],
   });
 
   Object.assign(state, {

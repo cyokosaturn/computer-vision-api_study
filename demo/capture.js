@@ -44,7 +44,7 @@ export default (state) => {
     const contentType = 'image/jpeg';
     state.dataUrl = videoToDataUrl($video, $canvas, contentType);
     const imageBlob = dataUrlToBlob(state.dataUrl, contentType);
-    resultArea.showLoading();
+    window.resultArea.showLoading();
     return visionAPI(imageBlob, 'application/octet-stream').then(displayVisionApiResult(state)).catch(console.error);
   };
 

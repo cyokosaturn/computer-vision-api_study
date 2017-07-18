@@ -29,6 +29,12 @@ export function displayVisionApiResult(state){
   return (json) => {
     if (json && json.description && json.description.captions) {
       state.resultText = json.description.captions[0].text;
+      if (state.mode === C.MODE.IMAGE) {
+        state.imageFaces = json.faces;
+      }
+      else {
+        state.cameraFaces = json.faces;
+      }
       speak(state.resultText);
     }
     state.resultJson = JSON.stringify(json, null, 2);

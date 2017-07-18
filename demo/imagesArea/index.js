@@ -23,7 +23,7 @@ export default state => {
         reader.onload = (function(file) {
           return function(e) {
             state.selectedImgUrl = e.target.result;
-            resultArea.showLoading();
+            window.resultArea.showLoading();
             visionAPI(file, 'application/octet-stream').then(displayVisionApiResult(state));
           };
         })(file);

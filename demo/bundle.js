@@ -55,7 +55,7 @@ exports.default = function (state) {
     var contentType = 'image/jpeg';
     state.dataUrl = videoToDataUrl($video, $canvas, contentType);
     var imageBlob = dataUrlToBlob(state.dataUrl, contentType);
-    resultArea.showLoading();
+    window.resultArea.showLoading();
     return (0, _visionAPI2.default)(imageBlob, 'application/octet-stream').then((0, _visionAPI.displayVisionApiResult)(state)).catch(console.error);
   };
 
@@ -126,7 +126,21 @@ exports.default = function (state) {
           return !state.dataUrl || state.recording ? 'hidden' : '';
         }),
         html: (0, _mobx.computed)(function () {
-          return '\n          <div class="buttons">\n            <button class="captureBtn" onclick="captureArea.toggleRec()">' + tmpl.btnLabel + '</button>\n          </div>\n          <video class="img-preview ' + tmpl.videoVisibleClass + '"></video>\n          <canvas width="320" height="240"></canvas>\n          <img src="' + state.dataUrl + '" class="img-preview ' + tmpl.imgVisibleClass + '"/>\n        ';
+          var faces = state.cameraFaces.map(function (face) {
+            var $preview = document.querySelector('.captureArea img.img-preview');
+            $preview.classList.remove('img-preview');
+            var orgWidth = $preview.clientWidth;
+            $preview.classList.add('img-preview');
+            var rate = $preview.clientWidth / orgWidth;
+            var top = face.faceRectangle.top * rate;
+            var left = face.faceRectangle.left * rate;
+            var width = face.faceRectangle.width * rate;
+            var height = face.faceRectangle.height * rate;
+
+            return '<div class="face" style="top:' + top + 'px;left:' + left + 'px;width:' + width + 'px;height:' + height + 'px;"><span>age:' + face.age + '</span></div>';
+          }).join('');
+
+          return '\n            <div class="buttons">\n              <button class="captureBtn" onclick="captureArea.toggleRec()">' + tmpl.btnLabel + '</button>\n            </div>\n            <div class="img-preview-wrapper">\n              <video class="img-preview ' + tmpl.videoVisibleClass + '"></video>\n              <canvas width="320" height="240"></canvas>\n              <img src="' + state.dataUrl + '" class="img-preview ' + tmpl.imgVisibleClass + '"/>\n              ' + faces + '\n            </div>\n          ';
         })
       });
       return function () {
@@ -180,6 +194,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
 var _mobx = require('mobx');
 
 var _mobxComponent = require('../mobx-component');
@@ -206,7 +224,21 @@ exports.default = function (state) {
     View: function View() {
       var tmpl = (0, _mobx.observable)({
         html: (0, _mobx.computed)(function () {
-          return '\n          <input class="img-url" value="' + state.selectedImgUrl + '" placeHolder="IMAGE URL" onfocus="imageArea.imgInputFieldSelect()"/><button class="go-btn" onclick="imageArea.selectImage()">GO</button>\n          <input type="file" onchange="imagesArea.selectImageFile(this)"/>\n          <img class="img-preview" src="' + state.selectedImgUrl + '"/>\n        ';
+          var faces = state.imageFaces.map(function (face) {
+            var $preview = document.querySelector('.imageArea .img-preview');
+            $preview.classList.remove('img-preview');
+            var orgWidth = $preview.clientWidth;
+            $preview.classList.add('img-preview');
+
+            var rate = $preview.clientWidth / orgWidth;
+            var top = face.faceRectangle.top * rate;
+            var left = face.faceRectangle.left * rate;
+            var width = face.faceRectangle.width * rate;
+            var height = face.faceRectangle.height * rate;
+
+            return '<div class="face" style="top:' + top + 'px;left:' + left + 'px;width:' + width + 'px;height:' + height + 'px;"><span>age:' + face.age + '</span></div>';
+          }).join('');
+          return '\n            <input class="img-url" value="' + state.selectedImgUrl + '" placeHolder="IMAGE URL" onfocus="imageArea.imgInputFieldSelect()"/><button class="go-btn" onclick="imageArea.selectImage()">GO</button>\n            <input type="file" onchange="imagesArea.selectImageFile(this)"/>\n            <div class="img-preview-wrapper">\n              <img class="img-preview" src="' + state.selectedImgUrl + '"/>\n              ' + faces + '\n            </div>\n          ';
         })
       });
       return function () {
@@ -216,7 +248,7 @@ exports.default = function (state) {
   });
 };
 
-},{"../elements":4,"../mobx-component":8,"mobx":13}],6:[function(require,module,exports){
+},{"../config":3,"../elements":4,"../mobx-component":8,"mobx":13}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -260,7 +292,7 @@ exports.default = function (state) {
         reader.onload = function (file) {
           return function (e) {
             state.selectedImgUrl = e.target.result;
-            resultArea.showLoading();
+            window.resultArea.showLoading();
             (0, _visionAPI2.default)(file, 'application/octet-stream').then((0, _visionAPI.displayVisionApiResult)(state));
           };
         }(file);
@@ -324,7 +356,9 @@ if (SUBSCRIPTION_KEY) {
     dataUrl: 'black.png',
     resultText: '',
     resultJson: '',
-    selectedImgUrl: 'https://metimes.jp/wp-content/uploads/images/67d79aa97a822fb6e8d4d7b25589a24a.jpg'
+    selectedImgUrl: 'https://metimes.jp/wp-content/uploads/images/67d79aa97a822fb6e8d4d7b25589a24a.jpg',
+    imageFaces: [],
+    cameraFaces: []
   });
 
   Object.assign(state, {
@@ -413,6 +447,8 @@ exports.default = function (state) {
       showLoading: function showLoading() {
         state.resultText = 'now loading...';
         state.resultJson = '';
+        state.imageFaces = [];
+        state.cameraFaces = [];
       }
     },
     View: function View() {
@@ -545,6 +581,11 @@ function displayVisionApiResult(state) {
   return function (json) {
     if (json && json.description && json.description.captions) {
       state.resultText = json.description.captions[0].text;
+      if (state.mode === _config2.default.MODE.IMAGE) {
+        state.imageFaces = json.faces;
+      } else {
+        state.cameraFaces = json.faces;
+      }
       (0, _speak2.default)(state.resultText);
     }
     state.resultJson = JSON.stringify(json, null, 2);

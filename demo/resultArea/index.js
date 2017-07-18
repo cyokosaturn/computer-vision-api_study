@@ -8,6 +8,8 @@ export default state => {
       showLoading: () => {
         state.resultText = 'now loading...';
         state.resultJson = '';
+        state.imageFaces = [];
+        state.cameraFaces = [];
       }
     },
     View: () => {

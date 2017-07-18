@@ -27,16 +27,36 @@ html,body{
   width: 90%;
   background-color: #555;
 }
-.img-preview{
+.img-preview-wrapper{
   margin-top: 10px;
   box-sizing: border-box;
-  width: 100%;
   border: solid 4px #555;
+  position: relative;
+}
+.img-preview{
+  width: 100%;
 }
 .images-area img{
   width: 24%;
   box-sizing: border-box;
 }
+.face{
+  border: solid 1px #00aaff;
+  position: absolute;
+  z-index: 999;
+}
+.face span{
+  padding: 0 4px;
+  position: relative;
+  top: -24px;
+  left: -1px;
+  height: 22px;
+  font-size: 12px;
+  background-color: #00aaff;
+  color: #fff;
+  display: inline-block;
+}
+
 .go-btn{
   padding: 10px;
   height: 40px;
