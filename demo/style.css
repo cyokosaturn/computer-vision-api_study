@@ -1,0 +1,100 @@
+html,body{
+  margin: 0;
+  height: 100%;
+  background-color: #333;
+  color: #aaa;
+}
+.main-container{
+  display: flex;
+  min-height: calc(100% - 80px);
+}
+.contents{
+  padding: 20px;
+  box-sizing: border-box;
+  width: 50%;
+}
+.sub-contents{
+  padding: 20px;
+  box-sizing: border-box;
+  width: 50%;
+  background-color: #000;
+}
+.img-url{
+  padding: 10px;
+  height: 40px;
+  box-sizing: border-box;
+  border: solid 4px #000;
+  width: 90%;
+  background-color: #555;
+}
+.img-preview{
+  margin-top: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  border: solid 4px #555;
+}
+.images-area img{
+  width: 24%;
+  box-sizing: border-box;
+}
+.go-btn{
+  padding: 10px;
+  height: 40px;
+  width: 10%;
+  box-sizing: border-box;
+  background-color: #000;
+  border: none;
+  color: #fff;
+}
+.result{
+  margin-top: 10px;
+  padding: 10px;
+  min-height: 80px;
+  box-sizing: border-box;
+  border: solid 4px #444;
+  width: 100%;
+  background-color: #222;
+}
+pre{
+  padding: 10px;
+  margin: 0;
+  box-sizing: border-box;
+  border: solid 4px #444;
+  border-top: none;
+  background-color: #222;
+  min-height: 300px;
+}
+.tabs{
+  padding: 10px 20px;
+  box-sizing: border-box;
+  background-color: #000;
+  height: 80px;
+}
+.tabs a{
+  margin-right: 20px;
+  color: #aaa;
+  text-decoration: none;
+}
+.tabs .active{
+  color: #00aaff;
+}
+.hidden{
+  display: none;
+}
+canvas{
+  display:none;
+}
+.imageMode .captureArea{
+  display: none;
+}
+.cameraMode .imageArea{
+  display: none;
+}
+.captureBtn{
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #000;
+  border: none;
+  color: #fff;
+}
