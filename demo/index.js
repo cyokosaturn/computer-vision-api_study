@@ -9,7 +9,8 @@ import ResultArea from './resultArea';
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 
-const SUBSCRIPTION_KEY = localStorage.getItem('SUBSCRIPTION_KEY') || window.prompt('INPUT SUBSCRIPTION KEY');
+// const SUBSCRIPTION_KEY = localStorage.getItem('SUBSCRIPTION_KEY') || window.prompt('INPUT SUBSCRIPTION KEY');
+const SUBSCRIPTION_KEY = '260f006a16c04453a6941651245fa3fc';
 if (SUBSCRIPTION_KEY) {
   localStorage.setItem('SUBSCRIPTION_KEY', SUBSCRIPTION_KEY);
 
@@ -19,7 +20,7 @@ if (SUBSCRIPTION_KEY) {
     dataUrl: 'black.png',
     resultText: '',
     resultJson: '',
-    selectedImgUrl: 'https://metimes.jp/wp-content/uploads/images/67d79aa97a822fb6e8d4d7b25589a24a.jpg',
+    selectedImgUrl: 'black.png',
     imageFaces: [],
     cameraFaces: [],
   });
